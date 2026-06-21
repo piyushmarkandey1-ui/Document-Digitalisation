@@ -24,49 +24,60 @@ export default async function handler(req: any, res: any) {
   }
 
   try {
-    const { files } = req.body as { files: FilePayload[] };
+    const files = (req.body.files || []) as any[];
 
-    if (!files || files.length === 0) {
-      return res.status(400).json({ error: "No files provided" });
+    if (files.length === 0) {
+      return res.status(400).json({ error: "No files uploaded" });
     }
 
-    const prompt = `You are a professional OCR (Optical Character Recognition) system specialised in reading handwritten documents, notes, letters, and forms.
+    const prompt = `You are a world-class Optical Character Recognition (OCR) expert. Transcribe the text from the following images/documents with extreme precision.
 
-TASK: Carefully read and transcribe ALL text visible in the provided document(s).
-
-STRICT RULES:
-1. Transcribe EVERY word exactly as written — preserve spelling even if incorrect
-2. Preserve paragraph breaks, line breaks, bullet points, and numbering
-3. If a word is genuinely illegible, write [illegible] in its place
-4. Include both printed and handwritten text
-5. Preserve numbers, dates, formulas, and special characters exactly
-6. If multiple pages/documents, separate each with: --- Page X ---
-7. Do NOT add any commentary, explanations, or corrections
+CRITICAL INSTRUCTIONS:
+1. Transcribe the text EXACTLY as written.
+2. Preserve all original line breaks, paragraphs, and punctuation.
+3. If handwriting is illegible, make your best guess based on context, but do not hallucinate words.
+4. DO NOT add any markdown formatting (like bolding, italics, or headers) unless it is explicitly written in the document.
+5. DO NOT add any introductory or concluding text (e.g. do not say "Here is the transcription:").
+6. If the document is blank, output nothing.
+7. Merge all pages seamlessly.
 8. Output ONLY the transcribed text — nothing else`;
 
-    const response = await genAI.models.generateContent({
-      model: "gemini-1.5-flash",
-      contents: [
-        {
-          role: "user",
-          parts: [
-            { text: prompt },
-            ...files.map((file) => ({
-              inlineData: {
-                data: file.data,
-                mimeType: file.mimeType,
-              },
-            })),
-          ],
+    const parts = [
+      { text: prompt },
+      ...files.map((file) => ({
+        inline_data: {
+          data: file.data,
+          mime_type: file.mimeType,
         },
-      ],
+      }))
+    ];
+
+    const apiKey = process.env.GEMINI_API_KEY;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        contents: [{ role: "user", parts }],
+      })
     });
 
-    const text = response.text ?? "";
-    const wordCount = text.trim().split(/\s+/).filter(Boolean).length;
-    const charCount = text.length;
+    const responseData = await response.json();
 
-    res.json({ text, wordCount, charCount });
+    if (!response.ok) {
+      throw responseData.error || new Error("Failed to extract text");
+    }
+
+    const outputText = responseData.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
+    
+    res.json({
+      text: outputText.trim(),
+      wordCount: outputText.split(/\s+/).filter((w: string) => w.length > 0).length,
+      charCount: outputText.length
+    });
   } catch (error: any) {
     console.error("Text extraction error:", error);
     const status = error?.status || error?.code || 500;
