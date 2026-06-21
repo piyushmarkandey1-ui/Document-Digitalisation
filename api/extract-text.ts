@@ -45,7 +45,7 @@ STRICT RULES:
 8. Output ONLY the transcribed text — nothing else`;
 
     const response = await genAI.models.generateContent({
-      model: "gemini-2.0-flash",
+      model: "gemini-1.5-flash",
       contents: [
         {
           role: "user",
