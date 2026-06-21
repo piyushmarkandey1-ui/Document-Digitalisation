@@ -627,7 +627,7 @@ export default function App() {
                             <Upload className="w-5 h-5 text-slate-400 group-hover:text-indigo-600" />
                           </div>
                           <p className="text-[10px] font-bold text-slate-400 group-hover:text-indigo-600 uppercase tracking-widest">Add More</p>
-                        </div>
+                        </motion.div>
                       </div>
 
                       <div className="flex bg-slate-100 p-1 rounded-xl mb-6">
