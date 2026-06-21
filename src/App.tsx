@@ -331,7 +331,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-900">
       {/* Header */}
-      <header className="border-b bg-white px-6 py-4 flex items-center justify-between sticky top-0 z-10 shadow-sm">
+      <header className="border-b bg-white px-4 md:px-6 py-4 flex flex-col md:flex-row items-center justify-between sticky top-0 z-10 shadow-sm gap-4 md:gap-0">
         <div className="flex items-center gap-8">
           <div className="flex items-center gap-2">
             <div className="bg-indigo-600 p-2 rounded-lg">
@@ -361,7 +361,7 @@ export default function App() {
           </nav>
         </div>
         
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3 w-full md:w-auto">
           {data && activeTab === "workbench" && (
             <>
               <div className="flex items-center bg-slate-100 p-1 rounded-xl mr-2">
@@ -420,7 +420,7 @@ export default function App() {
         </div>
       </header>
 
-      <main className="max-w-[1600px] mx-auto p-6">
+      <main className="max-w-[1600px] mx-auto p-2 md:p-6">
         <AnimatePresence mode="wait">
           {activeTab === "workbench" ? (
             <motion.div
@@ -556,10 +556,10 @@ export default function App() {
                   key="workspace"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="flex flex-col lg:flex-row gap-6 h-[calc(100vh-140px)]"
+                  className="flex flex-col lg:flex-row gap-4 md:gap-6 min-h-[calc(100vh-140px)] lg:h-[calc(100vh-140px)]"
                 >
                   {/* Left Panel: Preview */}
-                  <div className="lg:w-1/3 bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
+                  <div className="lg:w-1/3 bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden flex flex-col min-h-[300px]">
                     <div className="p-4 border-b bg-slate-50/50 flex items-center justify-between">
                       <p className="text-sm font-bold text-slate-700 uppercase tracking-wider">Document Source{files.length > 1 ? 's' : ''}</p>
                     </div>
@@ -595,7 +595,7 @@ export default function App() {
                   </div>
 
                   {/* Right Panel: Interactive Table or AI Insights or Raw Text */}
-                  <div className="lg:w-2/3 bg-white rounded-3xl shadow-lg border border-slate-200 overflow-hidden flex flex-col">
+                  <div className="lg:w-2/3 bg-white rounded-3xl shadow-lg border border-slate-200 overflow-hidden flex flex-col min-h-[500px]">
                     {rawTextData ? (
                       <div className="flex-1 flex flex-col h-full bg-slate-50 relative">
                         <div className="p-4 border-b bg-white flex items-center justify-between z-10 shadow-sm">
