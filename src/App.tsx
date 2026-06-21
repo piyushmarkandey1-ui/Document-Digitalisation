@@ -755,7 +755,7 @@ export default function App() {
                       </div>
                     )}
 
-                    {data.rows.length === 0 && (
+                    {data?.rows.length === 0 && (
                        <div className="flex-1 flex flex-col items-center justify-center p-12 text-center">
                         <div className="bg-slate-100 p-6 rounded-full mb-4">
                           <RefreshCw className="w-10 h-10 text-slate-300" />
