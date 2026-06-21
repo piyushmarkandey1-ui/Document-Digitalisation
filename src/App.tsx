@@ -522,7 +522,7 @@ export default function App() {
                     transition={{ duration: 0.5, ease: "easeOut" }}
                     className="text-center mb-10"
                   >
-                    <h2 className="text-5xl md:text-6xl font-display font-bold text-slate-900 mb-6 tracking-tight">Turn documents into <span className="text-indigo-600">structured data.</span></h2>
+                    <h2 className="text-5xl md:text-6xl font-display font-bold text-slate-900 mb-6 tracking-tight">Turn documents into <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600">structured data.</span></h2>
                     <p className="text-lg text-slate-500 max-w-xl mx-auto">Fast, accurate extraction engine. Process invoices, receipts, and handwritten notes into structured formats instantly.</p>
                   </motion.div>
 
@@ -545,7 +545,12 @@ export default function App() {
                       <p className="mt-2 text-xs text-indigo-600 font-bold bg-indigo-50/50 py-1 px-3 rounded-full inline-block">Supports Multiple Files & Languages</p>
                     </div>
                   ) : (
-                    <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-200 overflow-hidden">
+                    <motion.div 
+                      initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      transition={{ type: "spring", stiffness: 200, damping: 20 }}
+                      className="bg-white rounded-2xl p-8 shadow-2xl shadow-indigo-500/10 border border-slate-200 overflow-hidden relative"
+                    >
                        <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-3">
                           <div className="bg-indigo-600 p-3 rounded-xl shadow-lg shadow-indigo-100">
@@ -563,7 +568,13 @@ export default function App() {
 
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8 max-h-80 overflow-y-auto pr-2 custom-scrollbar">
                         {files.map((f, i) => (
-                          <div key={i} className="relative group rounded-xl border border-slate-100 overflow-hidden aspect-video bg-slate-50 flex items-center justify-center shadow-sm">
+                          <motion.div 
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: i * 0.05, type: "spring", stiffness: 300, damping: 20 }}
+                            key={i} 
+                            className="relative group rounded-xl border border-slate-100 overflow-hidden aspect-video bg-slate-50 flex items-center justify-center shadow-sm hover:shadow-md transition-shadow"
+                          >
                             {f.type.startsWith('image/') ? (
                               <img src={previewUrls[i]} alt="Preview" className="w-full h-full object-cover" />
                             ) : (
@@ -581,9 +592,12 @@ export default function App() {
                                 <Trash2 className="w-3 h-3" />
                               </button>
                             </div>
-                          </div>
+                          </motion.div>
                         ))}
-                        <div 
+                        <motion.div 
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ delay: files.length * 0.05 }}
                           {...getRootProps()}
                           className="border-2 border-dashed border-slate-200 rounded-xl aspect-video flex flex-col items-center justify-center gap-2 hover:border-indigo-400 hover:bg-indigo-50/30 transition-all cursor-pointer group"
                         >
@@ -612,10 +626,12 @@ export default function App() {
                         </button>
                       </div>
 
-                      <button
+                      <motion.button
+                        whileHover={!isProcessing ? { scale: 1.01 } : {}}
+                        whileTap={!isProcessing ? { scale: 0.98 } : {}}
                         onClick={() => processFiles()}
                         disabled={isProcessing}
-                        className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-indigo-600 to-indigo-800 hover:from-indigo-500 hover:to-indigo-700 disabled:from-slate-400 disabled:to-slate-500 text-white py-4 rounded-xl font-semibold text-lg transition-all shadow-lg shadow-indigo-500/20 active:scale-[0.98] group relative overflow-hidden shimmer-effect"
+                        className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-indigo-600 to-indigo-800 hover:from-indigo-500 hover:to-indigo-700 disabled:from-slate-400 disabled:to-slate-500 text-white py-4 rounded-xl font-semibold text-lg transition-all shadow-lg shadow-indigo-500/20 group relative overflow-hidden shimmer-effect"
                       >
                         {isProcessing && (
                           <div 
@@ -634,7 +650,7 @@ export default function App() {
                             <ChevronRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
                           </>
                         )}
-                      </button>
+                      </motion.button>
                       
                       {error && (
                         <div className="mt-6 p-4 bg-red-50 border border-red-100 rounded-xl flex items-center gap-3 text-red-700">
