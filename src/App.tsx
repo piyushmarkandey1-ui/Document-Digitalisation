@@ -517,10 +517,10 @@ export default function App() {
                         </button>
                         <button
                           onClick={() => setExtractionMode("text")}
-                          className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-sm font-semibold transition-all ${extractionMode === "text" ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                          className={`flex-1 py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all duration-300 font-medium ${extractionMode === 'text' ? 'bg-white text-indigo-600 shadow-[0_2px_10px_rgba(0,0,0,0.05)] ring-1 ring-gray-100/50' : 'text-gray-500 hover:text-gray-700 hover:bg-white/50'}`}
                         >
                           <FileText className="w-4 h-4" />
-                          Handwritten Text
+                          Structured Text
                         </button>
                       </div>
 

@@ -30,17 +30,16 @@ export default async function handler(req: any, res: any) {
       return res.status(400).json({ error: "No files uploaded" });
     }
 
-    const prompt = `You are a world-class Optical Character Recognition (OCR) expert. Transcribe the text from the following images/documents with extreme precision.
+    const prompt = `You are a world-class Document Intelligence Expert. Analyze the following document(s) and extract all the text into a clean, well-structured, and highly readable format.
 
 CRITICAL INSTRUCTIONS:
-1. Transcribe the text EXACTLY as written.
-2. Preserve all original line breaks, paragraphs, and punctuation.
-3. If handwriting is illegible, make your best guess based on context, but do not hallucinate words.
-4. DO NOT add any markdown formatting (like bolding, italics, or headers) unless it is explicitly written in the document.
-5. DO NOT add any introductory or concluding text (e.g. do not say "Here is the transcription:").
-6. If the document is blank, output nothing.
-7. Merge all pages seamlessly.
-8. Output ONLY the transcribed text — nothing else`;
+1. Organize the information logically into clear paragraphs and bullet points as needed.
+2. If there are headers or sections in the document, use markdown headers (e.g., ## Header) to separate them.
+3. If there are lists or key points, format them clearly using bullet points (-).
+4. Preserve all important data, numbers, dates, and context.
+5. If the document is blank, output nothing.
+6. Make the final output extremely easy to read and professionally formatted.
+7. Output ONLY the beautifully structured markdown text — nothing else`;
 
     const parts = [
       { text: prompt },

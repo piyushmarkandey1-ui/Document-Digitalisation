@@ -120,8 +120,18 @@ export default async function handler(req: any, res: any) {
         throw lastError || new Error("All fallback models failed.");
       }
 
-      const outputText = responseData.candidates?.[0]?.content?.parts?.[0]?.text ?? '{"columns":[], "rows":[]}';
+      let outputText = responseData.candidates?.[0]?.content?.parts?.[0]?.text ?? '{"columns":[], "rows":[]}';
+      
+      // Strip markdown code blocks if the model wrapped the JSON
+      outputText = outputText.replace(/```json/gi, '').replace(/```/g, '').trim();
+
       const extraction = JSON.parse(outputText);
+      
+      // Sanity check to prevent blank rows
+      if (extraction.rows && Array.isArray(extraction.rows)) {
+         extraction.rows = extraction.rows.filter((row: any) => Object.keys(row).length > 0);
+      }
+
       res.json(extraction);
     } catch (error: any) {
     console.error("Extraction error:", error);
